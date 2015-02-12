@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+   <title>Affichage d'un flux RSS</title>
+   <meta charset="utf-8">
+   <script language="JavaScript">
+   function afficheFlux(){
+     // On crée une connexion au fichier
+     var Connect = new XMLHttpRequest();
+ 
+     // On indique le fichier à ouvrir et on envoie la requête
+     Connect.open("GET", "getFlux.php", false);
+     Connect.setRequestHeader("Content-Type", "text/xml");
+     Connect.send(null);
+ 
+     // On stocke la réponse dans une variable
+     var TheDocument = Connect.responseXML;
+ 
+     // On stocke le noeud de la racine dans une variable Articles
+     var Articles = TheDocument.childNodes[0];
+ 
+     // On affiche les informations pour chaque article
+     for (var i = 0 ; i < Articles.children.length ; i++)
+		{
+			var Article = Articles.children[i];
+			
+			// On place chaque valeur dans une variable significative
+			var Titre = Article.getElementsByTagName("title");
+			var Lien = Article.getElementsByTagName("link");
+			var Description = Article.getElementsByTagName("description");
+			var Date = Article.getElementsByTagName("pubDate");
+			
+			// On limite le nombre d'articles à 50
+			for (i=0 ; i < 50 ; i++){			   
+				document.write("<h2> <a href=" + Lien[i+1].textContent.toString() + "/>" + Titre[i+1].textContent.toString() + " </a></h2>");
+				document.write(Description[i].textContent.toString());
+				document.write("<br />");
+				document.write(Date[i].textContent.toString());
+				document.write("<br /><br />");
+			}
+		}
+	}
+</script>
+   
+</head>
+<body>
+<script>
+	afficheFlux();
+</script>
+</body> 
+</html>
+
